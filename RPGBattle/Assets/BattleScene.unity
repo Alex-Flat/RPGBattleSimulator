@@ -152,10 +152,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aaeb4f7afed53e408c4104a2824e437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 3
-  enemyCount: 3
+  LOW_HEALTH_THRESHOLD: 0.4
+  AVG_DAMAGE: 20
+  AVG_HEAL: 15
+  AVG_BUFF: 10
+  AVG_DEBUFF: 10
+  AVG_SPEED: 5
+  playerCount: 5
+  enemyCount: 5
   playerSprite: {fileID: -2413806693520163455, guid: c677600a8bff6984b85eeb55789752e7, type: 3}
   enemySprite: {fileID: 7482667652216324306, guid: 61614d4c4e2062e40bc816b7351f50f1, type: 3}
+  battleUI: {fileID: 1687380564}
   playerTeam: []
   enemyTeam: []
 --- !u!4 &93418239

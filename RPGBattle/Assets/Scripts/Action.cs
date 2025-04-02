@@ -23,6 +23,6 @@ public abstract class Action
     }
 
     public abstract void Execute(Agent source, Agent target);
-    public virtual void Update(Agent target, float deltaTime) { }
+    public virtual void Update(Agent target, float deltaTime) {}
     public virtual bool IsComplete() => duration > 0 && timer >= duration;
 }

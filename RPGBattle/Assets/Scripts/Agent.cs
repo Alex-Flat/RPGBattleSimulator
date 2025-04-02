@@ -11,6 +11,7 @@ public class Agent : MonoBehaviour
     public float attack;
     public float defense;
     public float speed;
+    private AgentUI agentUI;
     protected SpriteRenderer spriteRenderer;
 
     public float MaxHealth => maxHealth;
@@ -21,7 +22,7 @@ public class Agent : MonoBehaviour
 
     public List<Action> availableActions = new List<Action>(); // Configured in BattleManager
 
-    public virtual void Initialize(float maxHealth, float attack, float defense, float speed, Sprite sprite)
+    public virtual void Initialize(float maxHealth, float attack, float defense, float speed, Sprite sprite, GameObject healthBarPrefab)
     {
         this.maxHealth = maxHealth;
         this.currHealth = maxHealth;
@@ -35,6 +36,16 @@ public class Agent : MonoBehaviour
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
         spriteRenderer.sprite = sprite;
+
+        GameObject uiObject = new GameObject($"{name}_UI");
+        agentUI = uiObject.AddComponent<AgentUI>();
+        GameObject healthBarInstance = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
+        Debug.Log($"Healthbar instance: {healthBarInstance}");
+        agentUI.healthBar = healthBarInstance.GetComponent<HealthBar>();
+        agentUI.Initialize(this, maxHealth);
+
+        // Position UI above Agent
+        uiObject.transform.position = transform.position + new Vector3(0, 1, 0); // Adjust offset as needed
     }
 
     public float GetActionInterval()
@@ -62,6 +73,10 @@ public class Agent : MonoBehaviour
 
     public virtual void Die()
     {
+        if (agentUI != null)
+        {
+            Destroy(agentUI.gameObject);
+        }
         Destroy(gameObject);
     }
 }
