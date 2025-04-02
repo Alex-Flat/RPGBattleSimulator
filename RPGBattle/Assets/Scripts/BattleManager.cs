@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour
         foreach (Agent agent in actionTimers.Keys.ToList())
         {
             actionTimers[agent] -= Time.deltaTime;
-            if (actionTimers[agent] >= 0.0f)
+            if (actionTimers[agent] <= 0.0f)
             {
                 PerformAction(agent);
                 actionTimers[agent] = agent.GetActionInterval();
@@ -133,7 +133,6 @@ public class BattleManager : MonoBehaviour
         // Filter living targets/allies
         List<Agent> validTargets = targets.Where(t => t != null && t.CurrHealth > 0).ToList();
         List<Agent> validAllies = allies.Where(a => a != null && a.CurrHealth > 0).ToList();
-
         if (action is ActionDamage || action is ActionDoT || action is ActionDebuff)
         {
             // Randomly select a target from enemies

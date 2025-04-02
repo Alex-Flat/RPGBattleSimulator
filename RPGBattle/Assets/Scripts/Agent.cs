@@ -75,7 +75,7 @@ public class Agent : MonoBehaviour
     {
         if (agentUI != null)
         {
-            Destroy(agentUI.gameObject);
+            agentUI.Die();
         }
         Destroy(gameObject);
     }

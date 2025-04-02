@@ -31,4 +31,10 @@ public class AgentUI : MonoBehaviour
     {
         healthBar.SetHealth(agent.CurrHealth);
     }
+
+    public void Die()
+    {
+        Destroy(healthBar.gameObject);
+        Destroy(gameObject);
+    }
 }
