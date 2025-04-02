@@ -5,7 +5,7 @@ public enum Team { Player, Enemy }
 
 public class Agent : MonoBehaviour
 {
-    public Team team; // Set in BattleManager or Inspector
+    private Team team;
     protected float maxHealth;
     protected float currHealth;
     public float attack;
@@ -14,16 +14,21 @@ public class Agent : MonoBehaviour
     private AgentUI agentUI;
     protected SpriteRenderer spriteRenderer;
 
+    public float actionTimer;
+    public List<Action> activeEffects = new List<Action>();
+
     public float MaxHealth => maxHealth;
     public float CurrHealth => currHealth;
     public float Attack => attack;
     public float Defense => defense;
     public float Speed => speed;
+    public Team Team => team;
 
     public List<Action> availableActions = new List<Action>(); // Configured in BattleManager
 
-    public virtual void Initialize(float maxHealth, float attack, float defense, float speed, Sprite sprite, GameObject healthBarPrefab)
+    public virtual void Initialize(Team team, float maxHealth, float attack, float defense, float speed, Sprite sprite, GameObject healthBarPrefab)
     {
+        this.team = team;
         this.maxHealth = maxHealth;
         this.currHealth = maxHealth;
         this.attack = attack;
