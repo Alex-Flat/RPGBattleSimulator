@@ -43,7 +43,7 @@ public class BattleManager : MonoBehaviour
         {
             GameObject playerObj = new GameObject($"Player_{i}");
             Agent player = playerObj.AddComponent<Agent>();
-            player.Initialize(Team.Player, 100f, 20f, 30f, 5f + i * 2, playerSprite, healthBarPrefab); // Vary speed slightly
+            player.Initialize(Team.Player, 100f, 20f, 30f, 5f + i * 2); // Vary speed slightly
             player.availableActions.Add(new ActionDamage(20f));
             player.availableActions.Add(new ActionHeal(15f));
             player.availableActions.Add(new ActionBuff("attack", 10f, 5f));
@@ -51,6 +51,8 @@ public class BattleManager : MonoBehaviour
             playerTeam.Add(player);
             actionTimers[player] = 0f;
             activeEffects[player] = new List<Action>();
+
+            player.SetupVisuals(playerSprite, healthBarPrefab);
         }
 
         // Spawn enemy agents
@@ -58,7 +60,7 @@ public class BattleManager : MonoBehaviour
         {
             GameObject enemyObj = new GameObject($"Enemy_{i}");
             Agent enemy = enemyObj.AddComponent<Agent>();
-            enemy.Initialize(Team.Enemy, 80f, 15f, 20f, 4f + i * 2, enemySprite, healthBarPrefab); // Vary speed slightly
+            enemy.Initialize(Team.Enemy, 80f, 15f, 20f, 4f + i * 2); // Vary speed slightly
             enemy.availableActions.Add(new ActionDamage(15f));
             enemy.availableActions.Add(new ActionDoT(5f, 6f, 2f));
             enemy.availableActions.Add(new ActionDebuff("defense", 10f, 5f));
@@ -66,6 +68,8 @@ public class BattleManager : MonoBehaviour
             enemyTeam.Add(enemy);
             actionTimers[enemy] = 0f;
             activeEffects[enemy] = new List<Action>();
+
+            enemy.SetupVisuals(enemySprite, healthBarPrefab);
         }
 
         Debug.Log("Battle setup complete!");
@@ -94,8 +98,6 @@ public class BattleManager : MonoBehaviour
                     }
                 }
                 agent.activeEffects = effects;
-                Debug.Log($"Agent {agent.name} has {effects.Count} active effects");
-                Debug.Log($"Agent {agent.name} has {agent.activeEffects.Count} active effects (from agent)");
             }
         }
 

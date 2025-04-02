@@ -26,7 +26,7 @@ public class Agent : MonoBehaviour
 
     public List<Action> availableActions = new List<Action>(); // Configured in BattleManager
 
-    public virtual void Initialize(Team team, float maxHealth, float attack, float defense, float speed, Sprite sprite, GameObject healthBarPrefab)
+    public virtual void Initialize(Team team, float maxHealth, float attack, float defense, float speed)
     {
         this.team = team;
         this.maxHealth = maxHealth;
@@ -34,23 +34,6 @@ public class Agent : MonoBehaviour
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
-
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-        }
-        spriteRenderer.sprite = sprite;
-
-        GameObject uiObject = new GameObject($"{name}_UI");
-        agentUI = uiObject.AddComponent<AgentUI>();
-        GameObject healthBarInstance = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
-        Debug.Log($"Healthbar instance: {healthBarInstance}");
-        agentUI.healthBar = healthBarInstance.GetComponent<HealthBar>();
-        agentUI.Initialize(this, maxHealth);
-
-        // Position UI above Agent
-        uiObject.transform.position = transform.position + new Vector3(0, 1, 0); // Adjust offset as needed
     }
 
     public float GetActionInterval()
@@ -83,5 +66,21 @@ public class Agent : MonoBehaviour
             agentUI.Die();
         }
         Destroy(gameObject);
+    }
+
+    public virtual void SetupVisuals(Sprite sprite, GameObject healthBarPrefab)
+    {
+        spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprite;
+
+        GameObject uiObject = new GameObject($"{name}_UI");
+        agentUI = uiObject.AddComponent<AgentUI>();
+        GameObject healthBarInstance = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
+        Debug.Log($"Healthbar instance: {healthBarInstance}");
+        agentUI.healthBar = healthBarInstance.GetComponent<HealthBar>();
+        agentUI.Initialize(this, maxHealth);
+
+        // Position UI above Agent
+        uiObject.transform.position = transform.position + new Vector3(0, 1, 0); // Adjust offset as needed
     }
 }
