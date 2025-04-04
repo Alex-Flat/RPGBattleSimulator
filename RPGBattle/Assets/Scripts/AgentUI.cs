@@ -10,6 +10,7 @@ public class AgentUI : MonoBehaviour
     private Agent agent;
     private GameObject healthBarPrefab;
     private GameObject textPrefab; // Store the prefab reference
+    private TMP_Text attackTimerText;
     private List<TMP_Text> effectLabels = new List<TMP_Text>();
     private float labelHeight = 14.0f; // Adjust based on prefab height
     private float labelOffset = 3.0f; // Space above health bar
@@ -23,21 +24,27 @@ public class AgentUI : MonoBehaviour
         GameObject healthBarInstance = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
         healthBar = healthBarInstance.GetComponent<HealthBar>();
 
+        GameObject attackTimerInstance = Instantiate(textPrefab, FindObjectOfType<Canvas>().transform);
+        attackTimerText = attackTimerInstance.GetComponent<TMP_Text>();
+        attackTimerText.color = Color.black;
+
         healthBar.Initialize(maxHealth);
         healthBarRectTransform = healthBar.GetComponent<RectTransform>();
     }
 
     void Update()
     {
-        UpdateUI();
+        UpdateHealthBarUI();
         UpdatePosition();
         UpdateEffectsUI();
+        UpdateAttackTimerUI();
     }
 
     void UpdatePosition()
     {
         transform.position = Camera.main.WorldToScreenPoint(agent.transform.position + new Vector3(0, 1, 0));
         healthBarRectTransform.position = transform.position;
+        attackTimerText.rectTransform.position = Camera.main.WorldToScreenPoint(agent.transform.position);
 
         for (int i = 0; i < effectLabels.Count; i++)
         {
@@ -48,7 +55,7 @@ public class AgentUI : MonoBehaviour
         }
     }
 
-    void UpdateUI()
+    void UpdateHealthBarUI()
     {
         healthBar.SetHealth(agent.CurrHealth);
     }
@@ -96,12 +103,18 @@ public class AgentUI : MonoBehaviour
         }
     }
 
+    void UpdateAttackTimerUI()
+    {
+        attackTimerText.text = $"{agent.actionTimer:F1}";
+    }
+
     public void Die()
     {
         foreach (TMP_Text label in effectLabels)
         {
             if (label != null) Destroy(label.gameObject);
         }
+        Destroy(attackTimerText.gameObject);
         Destroy(healthBar.gameObject);
         Destroy(gameObject);
     }

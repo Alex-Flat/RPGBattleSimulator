@@ -13,7 +13,7 @@ public class HealthBar : MonoBehaviour
     public void Initialize(float maxHealth)
     {
         this.maxHealth = maxHealth;
-        this.critHealth = BattleManager.CRIT_HEALTH_THRESHOLD;
+        this.critHealth = Constants.CRIT_HEALTH_THRESHOLD;
     }
     public void SetHealth(float health)
     {

@@ -5,26 +5,17 @@ using System.Linq;
 
 public class BattleManager : MonoBehaviour
 {
-    // Configurable in Inspector, 
-    public const float CRIT_HEALTH_THRESHOLD = 0.4f;
-    public const float AVG_DAMAGE = 20.0f;
-    public const float AVG_HEAL = 15.0f;
-    public const float AVG_BUFF = 10.0f;
-    public const float AVG_DEBUFF = 10.0f;
-    public const float AVG_SPEED = 5.0f;
-
     [SerializeField, Range(1, 10), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
     [SerializeField, Range(1, 10), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
-    [SerializeField] private Sprite playerSprite; // Assign circle sprite in Inspector
-    [SerializeField] private Sprite enemySprite;  // Assign square sprite in Inspector
-    [SerializeField] private GameObject healthBarPrefab;
-    [SerializeField] private GameObject textPrefab;
+    [SerializeField] private Sprite playerSprite; // Assign in the Inspector
+    [SerializeField] private Sprite enemySprite;  // Assign in the Inspector
+    [SerializeField] private GameObject healthBarPrefab; // Assign in the Inspector
+    [SerializeField] private GameObject textPrefab; // Assign in the Inspector
 
     public List<Agent> playerTeam = new List<Agent>();
     public List<Agent> enemyTeam = new List<Agent>();
     private Dictionary<Agent, float> actionTimers = new Dictionary<Agent, float>();
     public Dictionary<Agent, List<Action>> activeEffects = new Dictionary<Agent, List<Action>>();
-
 
     void Start()
     {
@@ -44,11 +35,18 @@ public class BattleManager : MonoBehaviour
         {
             GameObject playerObj = new GameObject($"Player_{i}");
             Agent player = playerObj.AddComponent<Agent>();
-            player.Initialize(Team.Player, Constants.BASE_HEALTH, Constants.AVG_ATTACK, Constants.AVG_DEFENSE, Constants.AVG_SPEED); // Vary speed slightly
-            //player.availableActions.Add(new ActionDamage(player));
-            //player.availableActions.Add(new ActionDoT(player));
-            //player.availableActions.Add(new ActionHeal(player));
-            //player.availableActions.Add(new ActionHoT(player));
+
+            // Initialize agent stats with variance.
+            float maxHealth = Constants.BASE_HEALTH + Random.Range(-Constants.STAT_VARIANCE * Constants.BASE_HEALTH, Constants.STAT_VARIANCE * Constants.BASE_HEALTH);
+            float attack = Constants.AVG_ATTACK + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_ATTACK, Constants.STAT_VARIANCE * Constants.AVG_ATTACK);
+            float defense = Constants.AVG_DEFENSE + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_DEFENSE, Constants.STAT_VARIANCE * Constants.AVG_DEFENSE);
+            float speed = Constants.AVG_SPEED + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_SPEED, Constants.STAT_VARIANCE * Constants.AVG_SPEED);
+
+            player.Initialize(Team.Player, maxHealth, attack, defense, speed);
+            player.availableActions.Add(new ActionDamage(player));
+            player.availableActions.Add(new ActionDoT(player));
+            player.availableActions.Add(new ActionHeal(player));
+            player.availableActions.Add(new ActionHoT(player));
             player.availableActions.Add(new ActionBuff(player));
             player.availableActions.Add(new ActionDebuff(player));
 
@@ -65,7 +63,14 @@ public class BattleManager : MonoBehaviour
         {
             GameObject enemyObj = new GameObject($"Enemy_{i}");
             Agent enemy = enemyObj.AddComponent<Agent>();
-            enemy.Initialize(Team.Enemy, Constants.BASE_HEALTH, Constants.AVG_ATTACK, Constants.AVG_DEFENSE, Constants.AVG_SPEED); // Vary speed slightly
+
+            // Initialize enemy stats with variance.
+            float maxHealth = Constants.BASE_HEALTH + Random.Range(-Constants.STAT_VARIANCE * Constants.BASE_HEALTH, Constants.STAT_VARIANCE * Constants.BASE_HEALTH);
+            float attack = Constants.AVG_ATTACK + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_ATTACK, Constants.STAT_VARIANCE * Constants.AVG_ATTACK);
+            float defense = Constants.AVG_DEFENSE + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_DEFENSE, Constants.STAT_VARIANCE * Constants.AVG_DEFENSE);
+            float speed = Constants.AVG_SPEED + Random.Range(-Constants.STAT_VARIANCE * Constants.AVG_SPEED, Constants.STAT_VARIANCE * Constants.AVG_SPEED);
+
+            enemy.Initialize(Team.Enemy, maxHealth, attack, defense, speed);
             enemy.availableActions.Add(new ActionDamage(enemy));
             enemy.availableActions.Add(new ActionDoT(enemy));
             enemy.availableActions.Add(new ActionDebuff(enemy, "defense"));
@@ -154,11 +159,11 @@ public class BattleManager : MonoBehaviour
         else if (action is ActionHeal || action is ActionHoT)
         {
             // Check if agent or any teammate is below critical health threshold
-            bool needsHealing = validAllies.Any(a => a.CurrHealth / a.MaxHealth < CRIT_HEALTH_THRESHOLD);
+            bool needsHealing = validAllies.Any(a => a.CurrHealth / a.MaxHealth < Constants.CRIT_HEALTH_THRESHOLD);
             if (needsHealing)
             {
                 // Randomly select a teammate below critical health threshold
-                List<Agent> lowHealthAllies = validAllies.Where(a => a.CurrHealth / a.MaxHealth < CRIT_HEALTH_THRESHOLD).ToList();
+                List<Agent> lowHealthAllies = validAllies.Where(a => a.CurrHealth / a.MaxHealth < Constants.CRIT_HEALTH_THRESHOLD).ToList();
                 if (lowHealthAllies.Count > 0)
                 {
                     target = lowHealthAllies[Random.Range(0, lowHealthAllies.Count)];
@@ -189,6 +194,10 @@ public class BattleManager : MonoBehaviour
             {
                 activeEffects[target].Add(action);
             }
+        }
+        else
+        {
+            PerformAction(agent);
         }
     }
 }

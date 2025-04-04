@@ -5,8 +5,6 @@ public enum Team { Player, Enemy }
 
 public class Agent : MonoBehaviour
 {
-    private const float LOW_HEALTH_DAMAGE_MULTIPLIER = 2.0f;
-
     private Team team;
     protected float maxHealth;
     protected float currHealth;
@@ -46,12 +44,8 @@ public class Agent : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        float actualDamage = damage * (1 - (0.0025f * defense));
+        float actualDamage = damage * (1 - (Constants.DEFENSE_DAMAGE_MULTIPLIER * defense));
         actualDamage = Mathf.Max(0, actualDamage);
-
-        if (currHealth - actualDamage < maxHealth * BattleManager.CRIT_HEALTH_THRESHOLD){
-            attack *= LOW_HEALTH_DAMAGE_MULTIPLIER;
-        }
 
         currHealth -= actualDamage;
 
@@ -63,9 +57,6 @@ public class Agent : MonoBehaviour
 
     public virtual void Heal(float amount)
     {
-        if (currHealth < BattleManager.CRIT_HEALTH_THRESHOLD && currHealth + amount > BattleManager.CRIT_HEALTH_THRESHOLD){
-            attack /= LOW_HEALTH_DAMAGE_MULTIPLIER;
-        }
         currHealth += amount;
         currHealth = Mathf.Min(currHealth, maxHealth);
     }
