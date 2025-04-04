@@ -45,16 +45,12 @@ public class BattleManager : MonoBehaviour
             GameObject playerObj = new GameObject($"Player_{i}");
             Agent player = playerObj.AddComponent<Agent>();
             player.Initialize(Team.Player, Constants.BASE_HEALTH, Constants.AVG_ATTACK, Constants.AVG_DEFENSE, Constants.AVG_SPEED); // Vary speed slightly
-            player.availableActions.Add(new ActionDamage(player));
-            player.availableActions.Add(new ActionDoT(player));
-            player.availableActions.Add(new ActionHeal(player));
-            player.availableActions.Add(new ActionHoT(player));
-            player.availableActions.Add(new ActionBuff(player, "attack"));
-            player.availableActions.Add(new ActionBuff(player, "defense"));
-            player.availableActions.Add(new ActionBuff(player, "speed"));
-            player.availableActions.Add(new ActionDebuff(player, "attack"));
-            player.availableActions.Add(new ActionDebuff(player, "defense"));
-            player.availableActions.Add(new ActionDebuff(player, "speed"));
+            //player.availableActions.Add(new ActionDamage(player));
+            //player.availableActions.Add(new ActionDoT(player));
+            //player.availableActions.Add(new ActionHeal(player));
+            //player.availableActions.Add(new ActionHoT(player));
+            player.availableActions.Add(new ActionBuff(player));
+            player.availableActions.Add(new ActionDebuff(player));
 
             playerObj.transform.position = new Vector3(-2f * (playerCount - i), 0, i);
             playerTeam.Add(player);
@@ -73,9 +69,10 @@ public class BattleManager : MonoBehaviour
             enemy.availableActions.Add(new ActionDamage(enemy));
             enemy.availableActions.Add(new ActionDoT(enemy));
             enemy.availableActions.Add(new ActionDebuff(enemy, "defense"));
+
             enemyObj.transform.position = new Vector3(2f * (i + 1), 0, i);
             enemyTeam.Add(enemy);
-            actionTimers[enemy] = 0f;
+            actionTimers[enemy] = Constants.START_COOLDOWN;
             activeEffects[enemy] = new List<Action>();
 
             enemy.SetupVisuals(enemySprite, healthBarPrefab, textPrefab);

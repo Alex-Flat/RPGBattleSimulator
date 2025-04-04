@@ -60,11 +60,12 @@ public class ActionDamage : Action
 
 /**********************************************************************************************************************/
 
+//Debuff class. If no stat is provided, will randomly select one debuff to apply.
 public class ActionDebuff : Action
 {
     private string stat;
 
-    public ActionDebuff(Agent source, string stat) 
+    public ActionDebuff(Agent source, string stat = "none") 
         : base($"{stat}", source, Constants.DEBUFF_DURATION)
     {
         this.stat = stat;
@@ -73,7 +74,16 @@ public class ActionDebuff : Action
     public override void Execute(Agent target)
     {
         base.Execute(target);
-        
+        if (stat == "none")
+        {
+            int randomIndex = Random.Range(0, 3);
+            switch (randomIndex)
+            {
+                case 0: stat = "attack"; break;
+                case 1: stat = "defense"; break;
+                case 2: stat = "speed"; break;
+            }
+        }
         switch (stat)
         {
             case "attack": target.attack *= Constants.DEBUFF_MULTIPLIER; break;
