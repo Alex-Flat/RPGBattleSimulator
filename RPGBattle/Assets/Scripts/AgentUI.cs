@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
@@ -12,8 +13,9 @@ public class AgentUI : MonoBehaviour
     private GameObject textPrefab; // Store the prefab reference
     private TMP_Text attackTimerText;
     private List<TMP_Text> effectLabels = new List<TMP_Text>();
+    private List<TMP_Text> floatingNumbers = new List<TMP_Text>();
     private float labelHeight = 14.0f; // Adjust based on prefab height
-    private float labelOffset = 3.0f; // Space above health bar
+    private float labelOffset = 30.0f; // Space above health bar
 
     public void Initialize(Agent agent, float maxHealth, GameObject healthBarPrefab, GameObject textPrefab)
     {
@@ -42,7 +44,7 @@ public class AgentUI : MonoBehaviour
 
     void UpdatePosition()
     {
-        transform.position = Camera.main.WorldToScreenPoint(agent.transform.position + new Vector3(0, 1, 0));
+        transform.position = Camera.main.WorldToScreenPoint(agent.transform.position + new Vector3(0, 0.85f, 0));
         healthBarRectTransform.position = transform.position;
         attackTimerText.rectTransform.position = Camera.main.WorldToScreenPoint(agent.transform.position);
 
@@ -50,7 +52,7 @@ public class AgentUI : MonoBehaviour
         {
             if (effectLabels[i] != null)
             {
-                effectLabels[i].rectTransform.position = transform.position + new Vector3(0, i * labelHeight + labelOffset, 0);
+                effectLabels[i].rectTransform.position = attackTimerText.rectTransform.position - new Vector3(0, (i + 1) * labelHeight + labelOffset, 0);
             }
         }
     }
@@ -108,12 +110,61 @@ public class AgentUI : MonoBehaviour
         attackTimerText.text = $"{agent.actionTimer:F1}";
     }
 
+     public void ShowFloatingNumber(float amount, bool isDamage)
+    {
+        GameObject numberObj = Instantiate(textPrefab, healthBarRectTransform.parent);
+        TMP_Text numberText = numberObj.GetComponent<TMP_Text>();
+        floatingNumbers.Add(numberText);
+        
+        // Set text and color
+        numberText.text = isDamage ? $"-{amount:F0}" : $"+{amount:F0}";
+        numberText.color = isDamage ? Color.red : Color.green;
+        
+        // Position at agent's location
+        numberText.rectTransform.position = Camera.main.WorldToScreenPoint(agent.transform.position + new Vector3(0, 1, 0));
+        
+        // Add floating animation and destruction
+        StartCoroutine(FloatAndFade(numberText));
+    }
+
+    private IEnumerator FloatAndFade(TMP_Text text)
+    {
+        float duration = 1f; // Lifespan of 1 second
+        float elapsed = 0f;
+        Vector3 startPos = text.rectTransform.position;
+        float floatDistance = 50f; // Pixels to float upwards in screen space
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            
+            // Move upwards
+            text.rectTransform.position = Vector3.Lerp(startPos, startPos + new Vector3(0, floatDistance, 0), t);
+            
+            // Fade out
+            Color color = text.color;
+            color.a = 1f - t;
+            text.color = color;
+            
+            yield return null;
+        }
+        Destroy(text.gameObject);
+        floatingNumbers.Remove(text);
+    }
+
     public void Die()
     {
         foreach (TMP_Text label in effectLabels)
         {
             if (label != null) Destroy(label.gameObject);
         }
+
+        foreach (TMP_Text number in floatingNumbers)
+        {
+            if (number != null) Destroy(number.gameObject);
+        }
+
         Destroy(attackTimerText.gameObject);
         Destroy(healthBar.gameObject);
         Destroy(gameObject);

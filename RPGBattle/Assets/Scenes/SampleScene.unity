@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aaeb4f7afed53e408c4104a2824e437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 5
-  enemyCount: 5
+  playerCount: 1
+  enemyCount: 12
   playerSprite: {fileID: -2413806693520163455, guid: c677600a8bff6984b85eeb55789752e7, type: 3}
   enemySprite: {fileID: 7482667652216324306, guid: 61614d4c4e2062e40bc816b7351f50f1, type: 3}
   healthBarPrefab: {fileID: 3726866701344959408, guid: 57a57c8de9bba1b449caa97911c4b4cb, type: 3}

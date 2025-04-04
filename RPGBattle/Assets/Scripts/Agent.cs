@@ -49,6 +49,10 @@ public class Agent : MonoBehaviour
 
         currHealth -= actualDamage;
 
+        if (agentUI != null)
+        {
+            agentUI.ShowFloatingNumber(actualDamage, true);
+        }
         if (currHealth <= 0)
         {
             Die();
@@ -59,6 +63,11 @@ public class Agent : MonoBehaviour
     {
         currHealth += amount;
         currHealth = Mathf.Min(currHealth, maxHealth);
+
+        if (agentUI != null)
+        {
+            agentUI.ShowFloatingNumber(amount, false);
+        }
     }
 
     public virtual void SetupVisuals(Sprite sprite, GameObject healthBarPrefab, GameObject textPrefab)

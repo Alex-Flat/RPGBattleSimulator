@@ -5,8 +5,8 @@ using System.Linq;
 
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField, Range(1, 10), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
-    [SerializeField, Range(1, 10), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
+    [SerializeField, Range(1, 12), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
+    [SerializeField, Range(1, 12), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
     [SerializeField] private Sprite playerSprite; // Assign in the Inspector
     [SerializeField] private Sprite enemySprite;  // Assign in the Inspector
     [SerializeField] private GameObject healthBarPrefab; // Assign in the Inspector
@@ -50,7 +50,7 @@ public class BattleManager : MonoBehaviour
             player.availableActions.Add(new ActionBuff(player));
             player.availableActions.Add(new ActionDebuff(player));
 
-            playerObj.transform.position = new Vector3(-2f * (playerCount - i), 0, i);
+            playerObj.transform.position = new Vector3(-2.5f * (i / 3) - 1.0f, -2.5f * (i % 3) + 2.5f, i);
             playerTeam.Add(player);
             actionTimers[player] = Constants.START_COOLDOWN;
             activeEffects[player] = new List<Action>();
@@ -73,9 +73,12 @@ public class BattleManager : MonoBehaviour
             enemy.Initialize(Team.Enemy, maxHealth, attack, defense, speed);
             enemy.availableActions.Add(new ActionDamage(enemy));
             enemy.availableActions.Add(new ActionDoT(enemy));
-            enemy.availableActions.Add(new ActionDebuff(enemy, "defense"));
+            enemy.availableActions.Add(new ActionHeal(enemy));
+            enemy.availableActions.Add(new ActionHoT(enemy));
+            enemy.availableActions.Add(new ActionBuff(enemy, "defense"));
+            enemy.availableActions.Add(new ActionDebuff(enemy, "attack"));
 
-            enemyObj.transform.position = new Vector3(2f * (i + 1), 0, i);
+            enemyObj.transform.position = new Vector3(2.5f * (i / 3) + 1.0f, -2.5f * (i % 3) + 2.5f, i);
             enemyTeam.Add(enemy);
             actionTimers[enemy] = Constants.START_COOLDOWN;
             activeEffects[enemy] = new List<Action>();
