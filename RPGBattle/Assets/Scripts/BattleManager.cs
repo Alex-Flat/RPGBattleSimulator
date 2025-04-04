@@ -44,13 +44,21 @@ public class BattleManager : MonoBehaviour
         {
             GameObject playerObj = new GameObject($"Player_{i}");
             Agent player = playerObj.AddComponent<Agent>();
-            player.Initialize(Team.Player, 100f, 20f, 30f, 5f + i * 2); // Vary speed slightly
-            player.availableActions.Add(new ActionDamage(20f));
-            player.availableActions.Add(new ActionHeal(15f));
-            player.availableActions.Add(new ActionBuff("attack", 10f, 5f));
+            player.Initialize(Team.Player, Constants.BASE_HEALTH, Constants.AVG_ATTACK, Constants.AVG_DEFENSE, Constants.AVG_SPEED); // Vary speed slightly
+            player.availableActions.Add(new ActionDamage(player));
+            player.availableActions.Add(new ActionDoT(player));
+            player.availableActions.Add(new ActionHeal(player));
+            player.availableActions.Add(new ActionHoT(player));
+            player.availableActions.Add(new ActionBuff(player, "attack"));
+            player.availableActions.Add(new ActionBuff(player, "defense"));
+            player.availableActions.Add(new ActionBuff(player, "speed"));
+            player.availableActions.Add(new ActionDebuff(player, "attack"));
+            player.availableActions.Add(new ActionDebuff(player, "defense"));
+            player.availableActions.Add(new ActionDebuff(player, "speed"));
+
             playerObj.transform.position = new Vector3(-2f * (playerCount - i), 0, i);
             playerTeam.Add(player);
-            actionTimers[player] = 0f;
+            actionTimers[player] = Constants.START_COOLDOWN;
             activeEffects[player] = new List<Action>();
 
             player.SetupVisuals(playerSprite, healthBarPrefab, textPrefab);
@@ -61,10 +69,10 @@ public class BattleManager : MonoBehaviour
         {
             GameObject enemyObj = new GameObject($"Enemy_{i}");
             Agent enemy = enemyObj.AddComponent<Agent>();
-            enemy.Initialize(Team.Enemy, 80f, 15f, 20f, 4f + i * 2); // Vary speed slightly
-            enemy.availableActions.Add(new ActionDamage(15f));
-            enemy.availableActions.Add(new ActionDoT(5f, 6f, 0.5f));
-            enemy.availableActions.Add(new ActionDebuff("defense", 10f, 5f));
+            enemy.Initialize(Team.Enemy, Constants.BASE_HEALTH, Constants.AVG_ATTACK, Constants.AVG_DEFENSE, Constants.AVG_SPEED); // Vary speed slightly
+            enemy.availableActions.Add(new ActionDamage(enemy));
+            enemy.availableActions.Add(new ActionDoT(enemy));
+            enemy.availableActions.Add(new ActionDebuff(enemy, "defense"));
             enemyObj.transform.position = new Vector3(2f * (i + 1), 0, i);
             enemyTeam.Add(enemy);
             actionTimers[enemy] = 0f;
@@ -179,7 +187,7 @@ public class BattleManager : MonoBehaviour
 
         if (target != null)
         {
-            action.Execute(agent, target);
+            action.Execute(target);
             if (action.duration > 0)
             {
                 activeEffects[target].Add(action);

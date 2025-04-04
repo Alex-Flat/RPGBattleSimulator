@@ -25,6 +25,7 @@ public class Agent : MonoBehaviour
     public float Defense => defense;
     public float Speed => speed;
     public Team Team => team;
+    public float GetDamage => (attack * Constants.DAMAGE_INC) + Constants.BASE_DAMAGE;
 
     public List<Action> availableActions = new List<Action>(); // Configured in BattleManager
 
@@ -69,15 +70,6 @@ public class Agent : MonoBehaviour
         currHealth = Mathf.Min(currHealth, maxHealth);
     }
 
-    public virtual void Die()
-    {
-        if (agentUI != null)
-        {
-            agentUI.Die();
-        }
-        Destroy(gameObject);
-    }
-
     public virtual void SetupVisuals(Sprite sprite, GameObject healthBarPrefab, GameObject textPrefab)
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
@@ -89,5 +81,14 @@ public class Agent : MonoBehaviour
 
         // Position UI above Agent
         uiObject.transform.position = transform.position + new Vector3(0, 1, 0); // Adjust offset as needed
+    }
+
+    public virtual void Die()
+    {
+        if (agentUI != null)
+        {
+            agentUI.Die();
+        }
+        Destroy(gameObject);
     }
 }
