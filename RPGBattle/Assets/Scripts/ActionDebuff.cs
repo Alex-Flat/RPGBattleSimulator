@@ -8,7 +8,7 @@ public class ActionDebuff : Action
     private float amount;
 
     public ActionDebuff(string stat, float amount, float duration) 
-        : base($"Debuff {stat}", duration)
+        : base($"{stat}", duration)
     {
         this.stat = stat;
         this.amount = amount;
@@ -16,6 +16,7 @@ public class ActionDebuff : Action
 
     public override void Execute(Agent source, Agent target)
     {
+        base.Execute(source, target);
         switch (stat)
         {
             case "attack": target.attack -= amount; break;
@@ -27,7 +28,7 @@ public class ActionDebuff : Action
 
     public override void Update(Agent target, float deltaTime)
     {
-        timer += deltaTime;
+        base.Update(target, deltaTime);
         if (IsComplete())
         {
             switch (stat)

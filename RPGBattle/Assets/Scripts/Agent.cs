@@ -5,6 +5,8 @@ public enum Team { Player, Enemy }
 
 public class Agent : MonoBehaviour
 {
+    private const float LOW_HEALTH_DAMAGE_MULTIPLIER = 2.0f;
+
     private Team team;
     protected float maxHealth;
     protected float currHealth;
@@ -43,8 +45,13 @@ public class Agent : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        float actualDamage = damage - (defense * 0.1f);
+        float actualDamage = damage * (1 - (0.0025f * defense));
         actualDamage = Mathf.Max(0, actualDamage);
+
+        if (currHealth - actualDamage < maxHealth * BattleManager.CRIT_HEALTH_THRESHOLD){
+            attack *= LOW_HEALTH_DAMAGE_MULTIPLIER;
+        }
+
         currHealth -= actualDamage;
 
         if (currHealth <= 0)
@@ -55,6 +62,9 @@ public class Agent : MonoBehaviour
 
     public virtual void Heal(float amount)
     {
+        if (currHealth < BattleManager.CRIT_HEALTH_THRESHOLD && currHealth + amount > BattleManager.CRIT_HEALTH_THRESHOLD){
+            attack /= LOW_HEALTH_DAMAGE_MULTIPLIER;
+        }
         currHealth += amount;
         currHealth = Mathf.Min(currHealth, maxHealth);
     }
@@ -68,17 +78,14 @@ public class Agent : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public virtual void SetupVisuals(Sprite sprite, GameObject healthBarPrefab)
+    public virtual void SetupVisuals(Sprite sprite, GameObject healthBarPrefab, GameObject textPrefab)
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
 
         GameObject uiObject = new GameObject($"{name}_UI");
         agentUI = uiObject.AddComponent<AgentUI>();
-        GameObject healthBarInstance = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
-        Debug.Log($"Healthbar instance: {healthBarInstance}");
-        agentUI.healthBar = healthBarInstance.GetComponent<HealthBar>();
-        agentUI.Initialize(this, maxHealth);
+        agentUI.Initialize(this, maxHealth, healthBarPrefab, textPrefab);
 
         // Position UI above Agent
         uiObject.transform.position = transform.position + new Vector3(0, 1, 0); // Adjust offset as needed

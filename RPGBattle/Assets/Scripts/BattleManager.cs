@@ -13,11 +13,12 @@ public class BattleManager : MonoBehaviour
     public const float AVG_DEBUFF = 10.0f;
     public const float AVG_SPEED = 5.0f;
 
-    [SerializeField] private int playerCount = 3; // Configurable in Inspector
-    [SerializeField] private int enemyCount = 3;  // Configurable in Inspector
+    [SerializeField, Range(1, 10), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
+    [SerializeField, Range(1, 10), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
     [SerializeField] private Sprite playerSprite; // Assign circle sprite in Inspector
     [SerializeField] private Sprite enemySprite;  // Assign square sprite in Inspector
     [SerializeField] private GameObject healthBarPrefab;
+    [SerializeField] private GameObject textPrefab;
 
     public List<Agent> playerTeam = new List<Agent>();
     public List<Agent> enemyTeam = new List<Agent>();
@@ -52,7 +53,7 @@ public class BattleManager : MonoBehaviour
             actionTimers[player] = 0f;
             activeEffects[player] = new List<Action>();
 
-            player.SetupVisuals(playerSprite, healthBarPrefab);
+            player.SetupVisuals(playerSprite, healthBarPrefab, textPrefab);
         }
 
         // Spawn enemy agents
@@ -62,14 +63,14 @@ public class BattleManager : MonoBehaviour
             Agent enemy = enemyObj.AddComponent<Agent>();
             enemy.Initialize(Team.Enemy, 80f, 15f, 20f, 4f + i * 2); // Vary speed slightly
             enemy.availableActions.Add(new ActionDamage(15f));
-            enemy.availableActions.Add(new ActionDoT(5f, 6f, 2f));
+            enemy.availableActions.Add(new ActionDoT(5f, 6f, 0.5f));
             enemy.availableActions.Add(new ActionDebuff("defense", 10f, 5f));
             enemyObj.transform.position = new Vector3(2f * (i + 1), 0, i);
             enemyTeam.Add(enemy);
             actionTimers[enemy] = 0f;
             activeEffects[enemy] = new List<Action>();
 
-            enemy.SetupVisuals(enemySprite, healthBarPrefab);
+            enemy.SetupVisuals(enemySprite, healthBarPrefab, textPrefab);
         }
 
         Debug.Log("Battle setup complete!");

@@ -14,16 +14,18 @@ public class ActionHoT : Action
 
     public override void Execute(Agent source, Agent target)
     {
-        target.Heal(healPerTick);
+        base.Execute(source, target);
+        duration -= interval;
         Debug.Log($"{source.name} applies HoT to {target.name}");
     }
 
     public override void Update(Agent target, float deltaTime)
     {
-        timer += deltaTime;
-        if (timer % interval < deltaTime)
+        base.Update(target, deltaTime);
+        if (timer - duration < 0.0f)
         {
             target.Heal(healPerTick);
+            duration -= interval;
             Debug.Log($"{target.name} heals {healPerTick} from HoT");
         }
     }

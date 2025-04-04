@@ -5,25 +5,29 @@ using UnityEngine;
 public class ActionDoT : Action
 {
     private float damagePerTick;
+    private float nextTick;
 
-    public ActionDoT(float damagePerTick, float duration, float interval) 
+    public ActionDoT(float damage, float duration, float interval) 
         : base("DoT", duration, interval)
     {
-        this.damagePerTick = damagePerTick;
+        this.damagePerTick = (damage / (duration / interval)) * 1.5f;
+        this.nextTick = duration;
     }
 
     public override void Execute(Agent source, Agent target)
     {
-        target.TakeDamage(damagePerTick);
+        base.Execute(source, target);
+        nextTick -= interval;
         Debug.Log($"{source.name} applies DoT to {target.name}");
     }
 
     public override void Update(Agent target, float deltaTime)
     {
-        timer += deltaTime;
-        if (timer % interval < deltaTime)
+        base.Update(target, deltaTime);
+        if (timer - nextTick < 0.0f)
         {
             target.TakeDamage(damagePerTick);
+            nextTick -= interval;
             Debug.Log($"{target.name} takes {damagePerTick} DoT damage");
         }
     }

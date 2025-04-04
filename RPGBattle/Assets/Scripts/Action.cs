@@ -22,7 +22,19 @@ public abstract class Action
         this.timer = 0f;
     }
 
-    public abstract void Execute(Agent source, Agent target);
-    public virtual void Update(Agent target, float deltaTime) {}
-    public virtual bool IsComplete() => duration > 0 && timer >= duration;
+    public virtual void Execute(Agent source, Agent target)
+    {
+        timer = duration;
+    }
+    public virtual void Update(Agent target, float deltaTime)
+    {
+        if (timer >= 0.0f)
+        {
+            timer -= deltaTime;
+        }
+    }
+    public virtual bool IsComplete()
+    {
+        return timer <= 0.0f;
+    }
 }
