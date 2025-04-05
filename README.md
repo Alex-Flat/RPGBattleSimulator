@@ -13,9 +13,13 @@ This Unity project is an RPG Battle Simulator featuring two teams of agents, var
 
 ## How to Run the Battle
 1. Clone this repository to your preferred local path.
-2. In Unity Hub, click "Add," navigate to the cloned path, and select the project.
-3. Open the project in Unity (tested with 2021.3+).
-4. Press the "Play" button to start the battle simulation.
+2. In Unity Hub, click "Add -> "Add project from disk."  Navigate to the cloned repository and select the RPGBattle folder inside of the RPGBattleSimulator folder.
+3. Open the project in Unity (tested with 2021.3.13f1).
+4. In the Editor, navigate to Assets/Scenes and double click "RPGBattle"
+5. Press the "Play" button to start the battle simulation!
+
+If you would like to mess with configurations, in the editor, click on BattleManager, where you can change the player/enemy count, as well as their sprites and UI prefabs before playing.
+In the code, agent stats and action calculations can be adjusted (Constants.cs). In addition, agent actions can be specifically configured in BattleManager.cs in the SetupBattle function.
 
 *Note*: Ensure TextMeshPro is installed in your Unity environment.
 
@@ -71,7 +75,7 @@ This Unity project is an RPG Battle Simulator featuring two teams of agents, var
 ---
 
 ### Q4: Putting It Together
-**Time Spent**: 70 minutes
+**Time Spent**: 85 minutes
 
 #### Development Process
 - Implemented win conditions in `UpdateBattle()` (battle ends when one team’s HP reaches 0).
@@ -90,10 +94,10 @@ This Unity project is an RPG Battle Simulator featuring two teams of agents, var
 - **Q1**: 40 minutes
 - **Q2**: 65 minutes
 - **Q3**: 55 minutes
-- **Q4**: 70 minutes
-- **Total**: ~230 minutes (~3.8 hours)
+- **Q4**: 85 minutes
+- **Total**: ~245 minutes (~4.1 hours)
 
-*Note*: Time was reduced significantly by using Grok AI for coding assistance.
+Time was reduced significantly by using Grok AI for coding assistance and understanding Unity features.
 
 ## Reflections
 For my first Unity project, this was a great accomplishment in my eyes. After learning the basics, I am fairly confident with Unity, but still currently struggle with project structure. With more experience on Unity, I will be able to learn better project management with regards to what items should be configurable in Inspector rather than in code, script organization, prefab creation and usage, and much more. In addition, this project was the first time I used Cursor, and it is now by far my favorite IDE. 
