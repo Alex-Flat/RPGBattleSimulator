@@ -1,6 +1,6 @@
 # RPG Battle Simulator
 
-This Unity project is an RPG Battle Simulator featuring two teams of agents, various actions for each agent, and minimal UI to follow the battle's progress. My goal was to focus on game balance by adjusting key features, such as agent properties (attack, health, etc.), or selection of action (e.g., choosing to heal a low health teammate). In addition, I want to add variance to the prior mentioned features so that battles are unique and engaging, and to create a flexible code base for future game development.
+This Unity project is an RPG Battle Simulator featuring two teams of agents, various actions for each agent, and simple UI to follow the battle's progress. My goal was to focus on game balance by adjusting key features, such as agent properties (attack, health, etc.), or selection of action (e.g., choosing to heal a low health teammate). In addition, I want to add variance to the prior mentioned features so that battles are unique and engaging, and to create a flexible code base for future game development.
 
 ## Table of Contents
 - [How to Run the Battle](#how-to-run-the-battle)
