@@ -63,6 +63,7 @@ public class ActionDamage : Action
 
 /**********************************************************************************************************************/
 
+//Total damage over time is selected (buffed, debuffed, or neither) at the start, and the remainding damage duration has no reaction to changes in buff state.
 public class ActionDoT : Action
 {
     private float damagePerTick;
