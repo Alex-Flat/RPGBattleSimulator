@@ -98,6 +98,6 @@ This Unity project is an RPG Battle Simulator featuring two teams of agents, var
 ## Reflections
 For my first Unity project, this was a great accomplishment in my eyes. After learning the basics, I am fairly confident with Unity, but still currently struggle with project structure. With more experience on Unity, I will be able to learn better project management with regards to what items should be configurable in Inspector rather than in code, script organization, prefab creation and usage, and much more. In addition, this project was the first time I used Cursor, and it is now by far my favorite IDE. 
 
-For my next project, I want to focus on the aforementioned project organization as well as taking better notes on my development process and design choices. I feel I made meaningful git commits messages, but I should constantly explain my thinking and implementations in another document while coding, rather than trying to do it later after I garner a significant amount of progress.
+For my next project, I want to focus on the aforementioned project organization as well as taking better notes on my development process and design choices. I feel I made meaningful git commits messages, but I should constantly explain my thinking and implementations in another document while coding, rather than trying to do it retroactively after significant progress.
 
 If you have any feedback, I would love to hear it so I can learn and improve as a developer! Thank you for viewing my project, and have a great day! :)

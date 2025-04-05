@@ -15,6 +15,7 @@ public class HealthBar : MonoBehaviour
         this.maxHealth = maxHealth;
         this.critHealth = Constants.CRIT_HEALTH_THRESHOLD;
     }
+    
     public void SetHealth(float health)
     {
         slider.value = health / maxHealth;
