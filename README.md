@@ -13,7 +13,7 @@ This Unity project is an RPG Battle Simulator featuring two teams of agents, var
 
 ## How to Run the Battle
 1. Clone this repository to your preferred local path.
-2. In Unity Hub, click "Add -> "Add project from disk."  Navigate to the cloned repository, click into the first RPGBattle folder, and select the RPGBattle folder inside.
+2. In Unity Hub, click "Add -> "Add project from disk."  Navigate to the cloned repository and select the RPGBattle folder inside of the RPGBattleSimulator folder.
 3. Open the project in Unity (tested with 2021.3.13f1).
 4. In the Editor, navigate to Assets/Scenes and double click "RPGBattle"
 5. Press the "Play" button to start the battle simulation!
