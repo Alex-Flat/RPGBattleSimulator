@@ -18,7 +18,7 @@ public class BattleUI : MonoBehaviour
     {
         if (battleText != null)
         {
-            battleText.text = $"Battle Over,\n{winner} wins!";
+            battleText.text = $"Battle Over,\n{winner} win!";
             battleText.transform.SetAsLastSibling();
         }
     }
