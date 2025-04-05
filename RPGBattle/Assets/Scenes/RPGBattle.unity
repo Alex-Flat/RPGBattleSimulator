@@ -152,12 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aaeb4f7afed53e408c4104a2824e437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCount: 1
-  enemyCount: 12
+  playerCount: 3
+  enemyCount: 3
   playerSprite: {fileID: -2413806693520163455, guid: c677600a8bff6984b85eeb55789752e7, type: 3}
   enemySprite: {fileID: 7482667652216324306, guid: 61614d4c4e2062e40bc816b7351f50f1, type: 3}
   healthBarPrefab: {fileID: 3726866701344959408, guid: 57a57c8de9bba1b449caa97911c4b4cb, type: 3}
   textPrefab: {fileID: 6632418379943313130, guid: e4a1a9cda52cbfa43b6a7f49c1c3d8f9, type: 3}
+  battleUI: {fileID: 659367909}
   playerTeam: []
   enemyTeam: []
 --- !u!4 &421913124
@@ -279,8 +280,9 @@ GameObject:
   - component: {fileID: 659367907}
   - component: {fileID: 659367906}
   - component: {fileID: 659367905}
+  - component: {fileID: 659367909}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: BattleUICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -344,7 +346,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -368,6 +370,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &659367909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659367904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271cee16b8a876c45942ef2f405d6b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleTextPrefab: {fileID: 5939322671214154029, guid: a2d557797bf2bce469660f6e5678b3bf, type: 3}
 --- !u!1 &1198336071
 GameObject:
   m_ObjectHideFlags: 0

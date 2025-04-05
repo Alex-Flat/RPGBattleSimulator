@@ -5,12 +5,13 @@ using System.Linq;
 
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField, Range(1, 12), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
-    [SerializeField, Range(1, 12), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
+    [SerializeField, Range(1, 15), Tooltip("Number of players in the party")] private int playerCount = 3; // Configurable in Inspector
+    [SerializeField, Range(1, 15), Tooltip("Number of enemies in the party")] private int enemyCount = 3;  // Configurable in Inspector
     [SerializeField] private Sprite playerSprite; // Assign in the Inspector
     [SerializeField] private Sprite enemySprite;  // Assign in the Inspector
     [SerializeField] private GameObject healthBarPrefab; // Assign in the Inspector
     [SerializeField] private GameObject textPrefab; // Assign in the Inspector
+    [SerializeField] private BattleUI battleUI; // Assign in the Inspector
 
     public List<Agent> playerTeam = new List<Agent>();
     public List<Agent> enemyTeam = new List<Agent>();
@@ -50,7 +51,7 @@ public class BattleManager : MonoBehaviour
             player.availableActions.Add(new ActionBuff(player));
             player.availableActions.Add(new ActionDebuff(player));
 
-            playerObj.transform.position = new Vector3(-2.5f * (i / 3) - 1.0f, -2.5f * (i % 3) + 2.5f, i);
+            playerObj.transform.position = new Vector3(-1.5f * (i / 3) - 1.0f, -2.5f * (i % 3) + 2.5f, i);
             playerTeam.Add(player);
             actionTimers[player] = Constants.START_COOLDOWN;
             activeEffects[player] = new List<Action>();
@@ -78,7 +79,7 @@ public class BattleManager : MonoBehaviour
             enemy.availableActions.Add(new ActionBuff(enemy, "defense"));
             enemy.availableActions.Add(new ActionDebuff(enemy, "attack"));
 
-            enemyObj.transform.position = new Vector3(2.5f * (i / 3) + 1.0f, -2.5f * (i % 3) + 2.5f, i);
+            enemyObj.transform.position = new Vector3(1.5f * (i / 3) + 1.0f, -2.5f * (i % 3) + 2.5f, i);
             enemyTeam.Add(enemy);
             actionTimers[enemy] = Constants.START_COOLDOWN;
             activeEffects[enemy] = new List<Action>();
@@ -119,6 +120,7 @@ public class BattleManager : MonoBehaviour
         if (playerTeam.Count == 0 || enemyTeam.Count == 0)
         {
             string winner = playerTeam.Count == 0 ? "Enemies" : "Players";
+            GameOver(winner);
             Debug.Log($"Battle ended! {winner} win!");
             enabled = false;
             return;
@@ -200,7 +202,14 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            // If no valid target, retry and find a new action.
             PerformAction(agent);
         }
+    }
+
+    // Useful if wanting to clean up the battle when the game is over. For now just call GameOver() in the BattleUI script.
+    public void GameOver(string winner)
+    {
+        battleUI.GameOver(winner);
     }
 }
